@@ -861,49 +861,57 @@ int main(void)
 			pCurrentAABB = g_mapAABBs_World.find(pID)->second;
 		}
 
+		glm::mat4 matModel = glm::mat4(1.0f);
+		pDebugCube->setPositionXYZ(g_mapAABBs_World.find(pID)->second->getCentre());
+		pDebugCube->setScale(50.0f / 2.0f);
+		pDebugCube->setDebugColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		pDebugCube->setIsWireframe(true);
+		DrawObject(matModel, pDebugCube,
+			shaderProgID, pTheVAOManager);
+
 
 		//pCurrentAABB = g_mapAABBs_World.find(pID)->second;
 		int cubeCount = 0;
 		int overlappingCubes = 0;
 		std::vector<std::string> locationVec;
 		bool cubeAtOrigin = false;
-		for (std::map<unsigned long long, cAABB*>::iterator mapIt = g_mapAABBs_World.begin(); mapIt != g_mapAABBs_World.end(); mapIt++)
-		{
-			//std::map<unsigned long long, cAABB*>::iterator mapIt2 = mapIt++;
-			{// Draw the AABBs
-				glm::mat4 matModel = glm::mat4(1.0f);
-				if (mapIt->second)
-				{
-					pDebugCube->setPositionXYZ(mapIt->second->getCentre());
-					if (mapIt->second->minXYZ.x < -999.0f && mapIt->second->minXYZ.y < -199.0f && mapIt->second->minXYZ.z < -999.0f)
-					{
-						cubeAtOrigin = true;
-					}
-					std::string positionString = std::to_string(pDebugCube->getPositionXYZ().x) + ", " + std::to_string(pDebugCube->getPositionXYZ().y) + ", " + std::to_string(pDebugCube->getPositionXYZ().z);
-					locationVec.push_back(positionString);
-					pDebugCube->setScale(50.0f / 2.0f);
-					if (mapIt->first == pID)
-					{
-						pDebugCube->setDebugColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-					}
-					else
-					{
-						pDebugCube->setDebugColour(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-					}
-					if (mapIt->first == pID)
-					{
-					pDebugCube->setIsWireframe(true);
-					DrawObject(matModel, pDebugCube,
-						shaderProgID, pTheVAOManager);
-					}
-				}
-			}
-			/*if (mapIt->second->minXYZ == mapIt2->second->minXYZ)
-			{
-				overlappingCubes++;
-			}*/
-			cubeCount++;
-		}
+		//for (std::map<unsigned long long, cAABB*>::iterator mapIt = g_mapAABBs_World.begin(); mapIt != g_mapAABBs_World.end(); mapIt++)
+		//{
+		//	//std::map<unsigned long long, cAABB*>::iterator mapIt2 = mapIt++;
+		//	{// Draw the AABBs
+		//		glm::mat4 matModel = glm::mat4(1.0f);
+		//		if (mapIt->second)
+		//		{
+		//			pDebugCube->setPositionXYZ(mapIt->second->getCentre());
+		//			if (mapIt->second->minXYZ.x < -999.0f && mapIt->second->minXYZ.y < -199.0f && mapIt->second->minXYZ.z < -999.0f)
+		//			{
+		//				cubeAtOrigin = true;
+		//			}
+		//			std::string positionString = std::to_string(pDebugCube->getPositionXYZ().x) + ", " + std::to_string(pDebugCube->getPositionXYZ().y) + ", " + std::to_string(pDebugCube->getPositionXYZ().z);
+		//			locationVec.push_back(positionString);
+		//			pDebugCube->setScale(50.0f / 2.0f);
+		//			if (mapIt->first == pID)
+		//			{
+		//				pDebugCube->setDebugColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		//			}
+		//			else
+		//			{
+		//				pDebugCube->setDebugColour(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+		//			}
+		//			if (mapIt->first == pID)
+		//			{
+		//			pDebugCube->setIsWireframe(true);
+		//			DrawObject(matModel, pDebugCube,
+		//				shaderProgID, pTheVAOManager);
+		//			}
+		//		}
+		//	}
+		//	/*if (mapIt->second->minXYZ == mapIt2->second->minXYZ)
+		//	{
+		//		overlappingCubes++;
+		//	}*/
+		//	cubeCount++;
+		//}
 
 
 		for (int i = 0; i < locationVec.size(); i++)

@@ -26,10 +26,11 @@ public:
 	glm::vec3 getCentre();
 	std::vector<glm::vec3> getVecBoxPoints();
 
-	triPoint triLocation;
 	cMesh* pTheMesh;
 	std::vector< sPlyTriangle* > vecTriangles;
-	std::vector<glm::vec3> triPosition;
+	std::vector<sPlyVertexXYZ_N> triPosition;
+	//std::vector<sPlyVertexXYZ_N> triYPosition;
+	//std::vector<sPlyVertexXYZ_N> triZPosition;
 
 	// 300-399    700-799    2400-2499
 //	glm::vec3 shipLocation = glm::vec3( )

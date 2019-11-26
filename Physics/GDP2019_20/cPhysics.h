@@ -47,7 +47,7 @@ public:
 
 	// Returns all the triangles and the closest points
 	void GetClosestTriangleToPoint(Point pointXYZ, cMesh &mesh, glm::vec3 &closestPoint, sPhysicsTriangle &closestTriangle );
-	void GetClosestTriangleToPoint(Point pointXYZ, cMesh* mesh, cAABB* currentAABB, glm::vec3& closestPoint, sPhysicsTriangle& closestTriangle);
+	void GetClosestTriangleToPoint(Point pointXYZ, cAABB* currentAABB, glm::vec3& closestPoint, sPhysicsTriangle& closestTriangle);
 
 	// Will return the closest triangles that are within the range "distanceRange".
 	// This can be used as a "closest triangles to sphere"

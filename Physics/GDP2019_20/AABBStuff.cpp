@@ -75,17 +75,38 @@ void CalcAABBsForMeshModel(cMesh& theMesh)
 	for (std::vector<sPlyTriangle>::iterator itTri = theMesh.vecTriangles.begin(); itTri != theMesh.vecTriangles.end(); itTri++)
 	{
 		glm::vec3 v1;
+		sPlyVertexXYZ_N pv1;
 		v1.x = theMesh.vecVertices[itTri->vert_index_1].x;
+		pv1.x = theMesh.vecVertices[itTri->vert_index_1].x;
 		v1.y = theMesh.vecVertices[itTri->vert_index_1].y;
+		pv1.y = theMesh.vecVertices[itTri->vert_index_1].y;
 		v1.z = theMesh.vecVertices[itTri->vert_index_1].z;
+		pv1.z = theMesh.vecVertices[itTri->vert_index_1].z;
+		pv1.nx = theMesh.vecVertices[itTri->vert_index_1].nx;
+		pv1.ny = theMesh.vecVertices[itTri->vert_index_1].ny;
+		pv1.nz = theMesh.vecVertices[itTri->vert_index_1].nz;
 		glm::vec3 v2;
+		sPlyVertexXYZ_N pv2;
 		v2.x = theMesh.vecVertices[itTri->vert_index_2].x;
+		pv2.x = theMesh.vecVertices[itTri->vert_index_2].x;
 		v2.y = theMesh.vecVertices[itTri->vert_index_2].y;
+		pv2.y = theMesh.vecVertices[itTri->vert_index_2].y;
 		v2.z = theMesh.vecVertices[itTri->vert_index_2].z;
+		pv2.z = theMesh.vecVertices[itTri->vert_index_2].z;
+		pv2.nx = theMesh.vecVertices[itTri->vert_index_2].nx;
+		pv2.ny = theMesh.vecVertices[itTri->vert_index_2].ny;
+		pv2.nz = theMesh.vecVertices[itTri->vert_index_2].nz;
 		glm::vec3 v3;
+		sPlyVertexXYZ_N pv3;
 		v3.x = theMesh.vecVertices[itTri->vert_index_3].x;
+		pv3.x = theMesh.vecVertices[itTri->vert_index_3].x;
 		v3.y = theMesh.vecVertices[itTri->vert_index_3].y;
+		pv3.y = theMesh.vecVertices[itTri->vert_index_3].y;
 		v3.z = theMesh.vecVertices[itTri->vert_index_3].z;
+		pv3.z = theMesh.vecVertices[itTri->vert_index_3].z;
+		pv3.nx = theMesh.vecVertices[itTri->vert_index_3].nx;
+		pv3.ny = theMesh.vecVertices[itTri->vert_index_3].ny;
+		pv3.nz = theMesh.vecVertices[itTri->vert_index_3].nz;
 
 		// Is the triangle too big?? 
 		// Is the length of ANY side longer than the AABB (longer than a half the AABB)
@@ -111,23 +132,17 @@ void CalcAABBsForMeshModel(cMesh& theMesh)
 		if (g_mapAABBs_World.find(ID_AABB_V1)->second)
 		{
 			::g_mapAABBs_World.find(ID_AABB_V1)->second->vecTriangles.push_back(&(*itTri));
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointX.x = v1.x;
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointX.y = v1.y;
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointX.z = v1.z;
+			::g_mapAABBs_World.find(ID_AABB_V1)->second->triPosition.push_back(pv1);
 		}
 		if (g_mapAABBs_World.find(ID_AABB_V2)->second)
 		{
 			::g_mapAABBs_World.find(ID_AABB_V2)->second->vecTriangles.push_back(&(*itTri));
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointY.x = v2.x;
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointY.y = v2.y;
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointY.z = v2.z;
+			::g_mapAABBs_World.find(ID_AABB_V2)->second->triPosition.push_back(pv2);
 		}
 		if (g_mapAABBs_World.find(ID_AABB_V3)->second)
 		{
 			::g_mapAABBs_World.find(ID_AABB_V3)->second->vecTriangles.push_back(&(*itTri));
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointZ.x = v3.x;
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointZ.y = v3.y;
-			::g_mapAABBs_World.find(ID_AABB_V1)->second->triLocation.pointZ.z = v3.z;
+			::g_mapAABBs_World.find(ID_AABB_V3)->second->triPosition.push_back(pv3);
 		}
 	}
 

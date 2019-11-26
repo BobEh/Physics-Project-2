@@ -537,7 +537,11 @@ int main(void)
 	//pTheModelLoader->LoadPlyModel("assets/models/Parts_Exposed_to_Asteroids_xyz_n.ply", exposedPartsMesh);
 
 	cMesh mountainRangeMesh;
-	pTheModelLoader->LoadPlyModel("assets/models/Mountain_range_xyz_n.ply", mountainRangeMesh);
+	if (!pTheModelLoader->LoadPlyModel("assets/models/Mountain_smaller_range_xyz_n.ply", mountainRangeMesh))
+	{
+		std::cout << "Error: couldn't find the mountain range ply." << std::endl;
+	}
+	
 
 	cMesh cubeMesh;
 	pTheModelLoader->LoadPlyModel("assets/models/Cube_1_Unit_from_origin_XYZ_n.ply", cubeMesh);
@@ -622,7 +626,7 @@ int main(void)
 	iObject* pSphere = pFactory->CreateObject("sphere");
 	pSphere->setMeshName("sphere");
 	pSphere->setFriendlyName("Sphere#1");	// We use to search 
-	pSphere->setPositionXYZ(glm::vec3(0.0f, 0.0f, 0.0f));
+	pSphere->setPositionXYZ(glm::vec3(0.0f, 50.0f, 0.0f));
 	pSphere->setRotationXYZ(glm::vec3(0.0f, 0.0f, 0.0f));
 	pSphere->setScale(1.0f);
 	pSphere->setObjectColourRGBA(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -630,7 +634,7 @@ int main(void)
 	pSphere->setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 	pSphere->setAccel(glm::vec3(0.0f, 0.0f, 0.0f));
 	pSphere->set_SPHERE_radius(1.0f);
-	pSphere->setInverseMass(0.0f);
+	pSphere->setInverseMass(1.0f);
 	pSphere->setIsVisible(true);
 	pSphere->setIsWireframe(false);
 	::g_vec_pGameObjects.push_back(pSphere);
@@ -766,8 +770,8 @@ int main(void)
 
 	glm::mat4 matWorld = calculateWorldMatrix(pMountainRange);
 
-	cMesh transformedMesh;
-	pPhsyics->CalculateTransformedMesh(mountainRangeMesh, matWorld, transformedMesh);
+	//cMesh transformedMesh;
+	//pPhsyics->CalculateTransformedMesh(mountainRangeMesh, matWorld, transformedMesh);
 
 	cMesh* mountainPtr = &mountainRangeMesh;
 
@@ -975,7 +979,7 @@ int main(void)
 
 		}//for (int index...
 
-		//pPhsyics->IntegrationStep(g_vec_pGameObjects, 0.03f);
+		pPhsyics->IntegrationStep(g_vec_pGameObjects, 0.03f);
 
 		for (int k = 0; k < pCurrentAABB->vecTriangles.size(); k++)
 		{
@@ -986,7 +990,7 @@ int main(void)
 			//cMesh transformedMesh;
 			//pPhsyics->CalculateTransformedMesh(mountainRangeMesh, matWorld, transformedMesh);
 
-			pPhsyics->GetClosestTriangleToPoint(pSphere->getPositionXYZ(), &mountainRangeMesh, pCurrentAABB, closestPoint, closestTriangle);
+			pPhsyics->GetClosestTriangleToPoint(pSphere->getPositionXYZ(), pCurrentAABB, closestPoint, closestTriangle);
 
 			// Highlight the triangle that I'm closest to
 			//pDebugRenderer->addTriangle(closestTriangle.verts[0],
@@ -1010,79 +1014,80 @@ int main(void)
 			// Are we hitting the triangle? 
 			float distance = glm::length(pSphere->getPositionXYZ() - closestPoint);
 
-	//		if (distance <= pSphere->get_SPHERE_radius())
-	//		{
-	//			//if (k == 0)
-	//			//{
-	//			//	pSphere->inverseMass = 0.0f;
-	//			//	pSphere->positionXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
-	//			//}
+			if (distance <= pSphere->get_SPHERE_radius())
+			{
+				//if (k == 0)
+				//{
+				//	pSphere->inverseMass = 0.0f;
+				//	pSphere->positionXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
+				//}
 
-	//			// ************************************************************************
+				// ************************************************************************
 
-	//			// If you want, move the sphere back to where it just penetrated...
-	//			// So that it will collide exactly where it's supposed to. 
-	//			// But, that's not a big problem.
+				//// If you want, move the sphere back to where it just penetrated...
+				//// So that it will collide exactly where it's supposed to. 
+				//// But, that's not a big problem.
 
-	//			// 1. Calculate vector from centre of sphere to closest point
-	//			glm::vec3 vecSphereToClosestPoint = closestPoint - pSphere->getPositionXYZ();
+				//// 1. Calculate vector from centre of sphere to closest point
+				//glm::vec3 vecSphereToClosestPoint = closestPoint - pSphere->getPositionXYZ();
 
-	//			// 2. Get the length of this vector
-	//			float centreToContractDistance = glm::length(vecSphereToClosestPoint);
+				//// 2. Get the length of this vector
+				//float centreToContractDistance = glm::length(vecSphereToClosestPoint);
 
-	//			// 3. Create a vector from closest point to radius
-	//			float lengthPositionAdjustment = pSphere->get_SPHERE_radius() - centreToContractDistance;
+				//// 3. Create a vector from closest point to radius
+				//float lengthPositionAdjustment = pSphere->get_SPHERE_radius() - centreToContractDistance;
 
-	//			// 4. Sphere is moving in the direction of the velocity, so 
-	//			//    we want to move the sphere BACK along this velocity vector
-	//			glm::vec3 vecDirection = glm::normalize(pSphere->getVelocity());
+				//// 4. Sphere is moving in the direction of the velocity, so 
+				////    we want to move the sphere BACK along this velocity vector
+				//glm::vec3 vecDirection = glm::normalize(pSphere->getVelocity());
 
-	//			glm::vec3 vecPositionAdjust = (-vecDirection) * lengthPositionAdjustment;
+				//glm::vec3 vecPositionAdjust = (-vecDirection) * lengthPositionAdjustment;
 
-	//			// 5. Reposition sphere 
-	//			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + vecPositionAdjust);
-	//			//			pSphere->inverseMass = 0.0f;
+				//// 5. Reposition sphere 
+				//pSphere->setPositionXYZ(pSphere->getPositionXYZ() + vecPositionAdjust);
+				//			pSphere->inverseMass = 0.0f;
 
-	//						// ************************************************************************
-
-
-	//						// Is in contact with the triangle... 
-	//						// Calculate the response vector off the triangle. 
-	//			glm::vec3 velocityVector = glm::normalize(pSphere->getVelocity());
-	//			float gravY = (-pSphere->getVelocity().y) * 0.45f;
-	//			glm::vec3 gravity = glm::vec3(0.0f, gravY, 0.0f);
-
-	//			// closestTriangle.normal
-	//			glm::vec3 reflectionVec = glm::reflect(velocityVector, closestTriangle.normal);
-	//			reflectionVec = glm::normalize(reflectionVec);
-
-	//			// Stop the sphere and draw the two vectors...
-	////			pSphere->inverseMass = 0.0f;	// Stopped
-
-	//			glm::vec3 velVecX20 = velocityVector * 10.0f;
-	//			pDebugRenderer->addLine(closestPoint, velVecX20,
-	//				glm::vec3(1.0f, 0.0f, 0.0f), 30.0f /*seconds*/);
-
-	//			glm::vec3 reflectionVecX20 = reflectionVec * 10.0f;
-	//			pDebugRenderer->addLine(closestPoint, reflectionVecX20,
-	//				glm::vec3(0.0f, 1.0f, 1.0f), 30.0f /*seconds*/);
-
-	//			// Change the direction of the ball (the bounce off the triangle)
-
-	//			// Get lenght of the velocity vector
-	//			float speed = glm::length(pSphere->getVelocity());
+							// ************************************************************************
 
 
+							// Is in contact with the triangle... 
+							// Calculate the response vector off the triangle. 
+				glm::vec3 velocityVector = glm::normalize(pSphere->getVelocity());
+				float gravY = (-pSphere->getVelocity().y) * 0.45f;
+				glm::vec3 gravity = glm::vec3(0.0f, gravY, 0.0f);
 
-	//			pSphere->setDiffuseColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	//			//std::cout << pSphere->velocity.b << ", " << pSphere->velocity.g << ", " << pSphere->velocity.p << ", " << pSphere->velocity.r << ", " << pSphere->velocity.s << ", " << pSphere->velocity.t << ", " << pSphere->velocity.x << ", " << pSphere->velocity.y << ", " << pSphere->velocity.z;
-	//		}
+				// closestTriangle.normal
+				glm::vec3 reflectionVec = glm::reflect(velocityVector, closestTriangle.normal);
+				reflectionVec = glm::normalize(reflectionVec);
+
+				// Stop the sphere and draw the two vectors...
+	//			pSphere->inverseMass = 0.0f;	// Stopped
+
+				glm::vec3 velVecX20 = velocityVector * 10.0f;
+				pDebugRenderer->addLine(closestPoint, velVecX20,
+					glm::vec3(1.0f, 0.0f, 0.0f), 30.0f /*seconds*/);
+
+				glm::vec3 reflectionVecX20 = reflectionVec * 10.0f;
+				pDebugRenderer->addLine(closestPoint, reflectionVecX20,
+					glm::vec3(0.0f, 1.0f, 1.0f), 30.0f /*seconds*/);
+
+				// Change the direction of the ball (the bounce off the triangle)
+
+				// Get lenght of the velocity vector
+				float speed = glm::length(pSphere->getVelocity());
+
+
+				pSphere->setVelocity((reflectionVec* speed) - gravity);
+				pSphere->setDiffuseColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+				//std::cout << pSphere->velocity.b << ", " << pSphere->velocity.g << ", " << pSphere->velocity.p << ", " << pSphere->velocity.r << ", " << pSphere->velocity.s << ", " << pSphere->velocity.t << ", " << pSphere->velocity.x << ", " << pSphere->velocity.y << ", " << pSphere->velocity.z;
+				break;
+			}
 
 			/*bool DidBallCollideWithGround = false;
 			HACK_BounceOffSomePlanes(pSphere, DidBallCollideWithGround );*/
 
 			// A more general 
-			//pPhsyics->TestForCollisions(::g_vec_pGameObjects);
+			pPhsyics->TestForCollisions(::g_vec_pGameObjects);
 
 			{// Draw closest point
 				glm::mat4 matModel = glm::mat4(1.0f);
@@ -1106,10 +1111,10 @@ int main(void)
 
 			float distanceToClosestPoint = glm::length(CentreToClosestPoint);
 
-			pDebugRenderer->addLine(pSphere->getPositionXYZ(),
-				closestPoint,
-				glm::vec3(0.0f, 1.0f, 0.0f),
-				1.0f);
+			//pDebugRenderer->addLine(pSphere->getPositionXYZ(),
+			//	closestPoint,
+			//	glm::vec3(0.0f, 1.0f, 0.0f),
+			//	1.0f);
 
 		}// end for
 		

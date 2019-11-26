@@ -130,7 +130,7 @@ void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cMesh& mesh, glm::vec3&
 
 	return;
 }
-void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cMesh* mesh, cAABB* currentAABB, glm::vec3& closestPoint, sPhysicsTriangle& closestTriangle)
+void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cAABB* currentAABB, glm::vec3& closestPoint, sPhysicsTriangle& closestTriangle)
 {
 	// Assume the closest distance is REALLY far away
 	float closestDistanceSoFar = FLT_MAX;
@@ -142,9 +142,13 @@ void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cMesh* mesh, cAABB* cur
 		sPlyTriangle& curTriangle = *currentAABB->vecTriangles[triIndex];
 
 		// Get the vertices of the triangle
-		sPlyVertexXYZ_N triVert1 = mesh->vecVertices[curTriangle.vert_index_1];
-		sPlyVertexXYZ_N triVert2 = mesh->vecVertices[curTriangle.vert_index_2];
-		sPlyVertexXYZ_N triVert3 = mesh->vecVertices[curTriangle.vert_index_3];
+		sPlyVertexXYZ_N triVert1 = currentAABB->triPosition.at(triIndex);
+		sPlyVertexXYZ_N triVert2 = currentAABB->triPosition.at(triIndex);
+		sPlyVertexXYZ_N triVert3 = currentAABB->triPosition.at(triIndex);
+
+		//glm::vec3 triVert1 = currentAABB->triXPosition.at(triIndex);
+		//glm::vec3 triVert2 = currentAABB->triYPosition.at(triIndex);
+		//glm::vec3 triVert3 = currentAABB->triZPosition.at(triIndex);
 
 		//sPlyVertexXYZ_N triVert1 = currentAABB->triLocation.pointX;
 		//sPlyVertexXYZ_N triVert2 = currentAABB->triLocation.pointY;

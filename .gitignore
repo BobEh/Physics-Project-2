@@ -1,6 +1,10 @@
 # Prerequisites
 *.d
 
+# Ignore .vs folder
+.vs/
+x64/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -30,3 +34,13 @@
 *.exe
 *.out
 *.app
+
+# Mountain range model is too big
+Physics/GDP2019_20/assets/models/Mountain_range.ply
+Mountain_range.ply
+Physics/GDP2019_20/assets/models/Mountain_range_xyz_n.ply
+Mountain_range_xyz_n.ply
+Physics/GDP2019_20/assets/models/Mountain_range_xyz_n.ply
+Physics/GDP2019_20/assets/models/Mountain_smaller_range_xyz_n.ply
+Mountain_smaller_range_xyz_n.ply
+Physics/GDP2019_20/assets/models/Mountain_smaller_range_xyz_n.ply

@@ -2,17 +2,20 @@
 
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <string>
+#include <vector>
 
 class iObject
 {
 public:
 	//getters
+	virtual std::vector<glm::vec3> getTestPoints() = 0;
 	virtual std::string getMeshName() = 0;
 	virtual unsigned int getFriendlyIDNumber() = 0;
 	virtual std::string getFriendlyName() = 0;
 	virtual glm::vec3 getPositionXYZ() = 0;
-	virtual glm::vec3 getRotationXYZ() = 0;
+	virtual glm::quat getRotationXYZ() = 0;
 	virtual float getScale() = 0;
 	virtual glm::mat4 getMatWorld() = 0;
 	virtual glm::vec4 getObjectColourRGBA() = 0;
@@ -34,11 +37,12 @@ public:
 	//leave this one ( don't need a setter )
 	virtual unsigned int getUniqueID(void) = 0;
 	//setters
+	virtual void addTestPoint(glm::vec3) = 0;
 	virtual void setMeshName(std::string name) = 0;
 	virtual void setFriendlyIDNumber(unsigned int IDNumber) = 0;
 	virtual void setFriendlyName(std::string friendlyName) = 0;
 	virtual void setPositionXYZ(glm::vec3 positionXYZ) = 0;
-	virtual void setRotationXYZ(glm::vec3 rotationXYZ) = 0;
+	virtual void setRotationXYZ(glm::quat rotationXYZ) = 0;
 	virtual void setScale(float scale) = 0;
 	virtual void setMatWorld(glm::mat4 matWorld) = 0;
 	virtual void setObjectColourRGBA(glm::vec4 colourRGBA) = 0;

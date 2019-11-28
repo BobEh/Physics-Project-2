@@ -5,6 +5,11 @@ void cSphereObject::Shoot()
 	this->pShooter->Shoot();
 }
 
+std::vector<glm::vec3> cSphereObject::getTestPoints()
+{
+	return this->testPoints;
+}
+
 std::string cSphereObject::getMeshName()
 {
 	return this->_meshName;
@@ -21,9 +26,9 @@ glm::vec3 cSphereObject::getPositionXYZ()
 {
 	return this->_positionXYZ;
 }
-glm::vec3 cSphereObject::getRotationXYZ()
+glm::quat cSphereObject::getRotationXYZ()
 {
-	return this->_rotationXYZ;
+	return this->qRotation;
 }
 float cSphereObject::getScale()
 {
@@ -98,6 +103,11 @@ bool cSphereObject::getDisableDepthBufferWrite()
 	return this->_disableDepthBufferWrite;
 }
 //setters
+
+void cSphereObject::addTestPoint(glm::vec3 testPoint)
+{
+	this->testPoints.push_back(testPoint);
+}
 void cSphereObject::setMeshName(std::string name)
 {
 	this->_meshName = name;
@@ -114,9 +124,9 @@ void cSphereObject::setPositionXYZ(glm::vec3 positionXYZ)
 {
 	this->_positionXYZ = positionXYZ;
 }
-void cSphereObject::setRotationXYZ(glm::vec3 rotationXYZ)
+void cSphereObject::setRotationXYZ(glm::quat rotationXYZ)
 {
-	this->_rotationXYZ = rotationXYZ;
+	this->qRotation = rotationXYZ;
 }
 void cSphereObject::setScale(float scale)
 {

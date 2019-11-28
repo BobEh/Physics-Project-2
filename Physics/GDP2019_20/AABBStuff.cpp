@@ -19,7 +19,7 @@ void CalcAABBsForMeshModel(cMesh& theMesh)
 	// For the space station, I'll make a size of -5,000 to 5,000
 	const float WorldSize = 1000.0f;
 	const float WorldHeight = 200.0f;
-	const float AABBsize = 50.0f;
+	const float AABBsize = 25.0f;
 	unsigned int totalUnits = 0;
 	unsigned int totalAabbSize = AABBsize * AABBsize * AABBsize;
 	unsigned long long idAtVeryMin = 0;
@@ -36,7 +36,7 @@ void CalcAABBsForMeshModel(cMesh& theMesh)
 				pAABB->minXYZ.x = x;
 				pAABB->minXYZ.y = y;
 				pAABB->minXYZ.z = z;
-				pAABB->length = 50.0f;
+				pAABB->length = 25.0f;
 
 				// Store a pointer to the mesh
 				pAABB->pTheMesh = &theMesh;

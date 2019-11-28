@@ -4,6 +4,10 @@ std::string cGameObject::getMeshName()
 {
 	return this->_meshName;
 }
+std::vector<glm::vec3> cGameObject::getTestPoints()
+{
+	return this->testPoints;
+}
 unsigned int cGameObject::getFriendlyIDNumber()
 {
 	return this->_friendlyIDNumber;
@@ -16,9 +20,9 @@ glm::vec3 cGameObject::getPositionXYZ()
 {
 	return this->_positionXYZ;
 }
-glm::vec3 cGameObject::getRotationXYZ()
+glm::quat cGameObject::getRotationXYZ()
 {
-	return this->_rotationXYZ;
+	return this->qRotation;
 }
 float cGameObject::getScale()
 {
@@ -93,6 +97,11 @@ bool cGameObject::getDisableDepthBufferWrite()
 	return this->_disableDepthBufferWrite;
 }
 //setters
+
+void cGameObject::addTestPoint(glm::vec3 testPoint)
+{
+	
+}
 void cGameObject::setMeshName(std::string name)
 {
 	this->_meshName = name;
@@ -109,9 +118,9 @@ void cGameObject::setPositionXYZ(glm::vec3 positionXYZ)
 {
 	this->_positionXYZ = positionXYZ;
 }
-void cGameObject::setRotationXYZ(glm::vec3 rotationXYZ)
+void cGameObject::setRotationXYZ(glm::quat rotationXYZ)
 {
-	this->_rotationXYZ = rotationXYZ;
+	this->qRotation = rotationXYZ;
 }
 void cGameObject::setScale(float scale)
 {

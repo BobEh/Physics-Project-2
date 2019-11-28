@@ -21,7 +21,7 @@ public:
 	unsigned int getFriendlyIDNumber();
 	std::string getFriendlyName();
 	glm::vec3 getPositionXYZ();
-	glm::vec3 getRotationXYZ();
+	glm::quat getRotationXYZ();
 	float getScale();
 	glm::mat4 getMatWorld();
 	glm::vec4 getObjectColourRGBA();
@@ -40,12 +40,13 @@ public:
 	bool getIsVisible();
 	bool getDisableDepthBufferTest();
 	bool getDisableDepthBufferWrite();
+	std::vector<glm::vec3> getTestPoints();
 	//setters
 	void setMeshName(std::string name);
 	void setFriendlyIDNumber(unsigned int IDNumber);
 	void setFriendlyName(std::string friendlyName);
 	void setPositionXYZ(glm::vec3 positionXYZ);
-	void setRotationXYZ(glm::vec3 rotationXYZ);
+	void setRotationXYZ(glm::quat rotationXYZ);
 	void setScale(float scale);
 	void setMatWorld(glm::mat4 matWorld);
 	void setObjectColourRGBA(glm::vec4 colourRGBA);
@@ -64,8 +65,11 @@ public:
 	void setIsVisible(bool isVisible);
 	void setDisableDepthBufferTest(bool disableDepthBufferTest);
 	void setDisableDepthBufferWrite(bool disableDwpthBufferWrite);
+	void addTestPoint(glm::vec3);
 
 private:
+	glm::quat qRotation;
+	std::vector<glm::vec3> testPoints;
 	static unsigned int next_uniqueID;
 	unsigned int _m_uniqueID;
 	std::string _meshName;

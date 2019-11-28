@@ -5,6 +5,11 @@ void cMeshObject::Shoot()
 	this->pBigShooter->Shoot();
 }
 
+std::vector<glm::vec3> cMeshObject::getTestPoints()
+{
+	return this->testPoints;
+}
+
 std::string cMeshObject::getMeshName()
 {
 	return this->_meshName;
@@ -21,9 +26,9 @@ glm::vec3 cMeshObject::getPositionXYZ()
 {
 	return this->_positionXYZ;
 }
-glm::vec3 cMeshObject::getRotationXYZ()
+glm::quat cMeshObject::getRotationXYZ()
 {
-	return this->_rotationXYZ;
+	return this->qRotation;
 }
 float cMeshObject::getScale()
 {
@@ -98,6 +103,10 @@ bool cMeshObject::getDisableDepthBufferWrite()
 	return this->_disableDepthBufferWrite;
 }
 //setters
+void cMeshObject::addTestPoint(glm::vec3 testPoint)
+{
+	
+}
 void cMeshObject::setMeshName(std::string name)
 {
 	this->_meshName = name;
@@ -114,9 +123,9 @@ void cMeshObject::setPositionXYZ(glm::vec3 positionXYZ)
 {
 	this->_positionXYZ = positionXYZ;
 }
-void cMeshObject::setRotationXYZ(glm::vec3 rotationXYZ)
+void cMeshObject::setRotationXYZ(glm::quat rotationXYZ)
 {
-	this->_rotationXYZ = rotationXYZ;
+	this->qRotation = rotationXYZ;
 }
 void cMeshObject::setScale(float scale)
 {

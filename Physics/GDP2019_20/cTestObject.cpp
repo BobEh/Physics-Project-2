@@ -16,9 +16,9 @@ glm::vec3 cTestObject::getPositionXYZ()
 {
 	return this->_positionXYZ;
 }
-glm::vec3 cTestObject::getRotationXYZ()
+glm::quat cTestObject::getRotationXYZ()
 {
-	return this->_rotationXYZ;
+	return this->qRotation;
 }
 float cTestObject::getScale()
 {
@@ -109,9 +109,9 @@ void cTestObject::setPositionXYZ(glm::vec3 positionXYZ)
 {
 	this->_positionXYZ = positionXYZ;
 }
-void cTestObject::setRotationXYZ(glm::vec3 rotationXYZ)
+void cTestObject::setRotationXYZ(glm::quat rotationXYZ)
 {
-	this->_rotationXYZ = rotationXYZ;
+	this->qRotation = rotationXYZ;
 }
 void cTestObject::setScale(float scale)
 {

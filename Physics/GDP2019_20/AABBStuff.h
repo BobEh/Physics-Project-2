@@ -96,9 +96,9 @@ public:
 			ulZ += 100000;		// 000,000   100,000
 		}
 
-		ulX += ((unsigned long long) fabs(floor(testLocation.x / 50))) * 50;	// -300	
-		ulY += ((unsigned long long) fabs(floor(testLocation.y / 50))) * 50;	// 700
-		ulZ += ((unsigned long long) fabs(floor(testLocation.z / 50))) * 50;	// -2400
+		ulX += ((unsigned long long) fabs(floor(testLocation.x / 25))) * 25;	// -300	
+		ulY += ((unsigned long long) fabs(floor(testLocation.y / 25))) * 25;	// 700
+		ulZ += ((unsigned long long) fabs(floor(testLocation.z / 25))) * 25;	// -2400
 
 		unsigned long long oneMillion = 1000000;
 

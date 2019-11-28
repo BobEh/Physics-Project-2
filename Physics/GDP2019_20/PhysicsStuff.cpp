@@ -6,16 +6,16 @@
 
 //extern bool g_BallCollided;
 
-void PhysicsUpdate(std::vector<cGameObject*>& vec_pGameObjects,
-				   float deltaTime)
+void PhysicsUpdate(std::vector<cGameObject*>& vec_pGameObjects, float deltaTime)
 {
 
 	// 9.81 
 	glm::vec3 gravity = glm::vec3( 0.0f, -6.0f, 0.0f );
 
+	
 
-	for (unsigned int index = 0;
-		 index != vec_pGameObjects.size(); index++)
+
+	for (unsigned int index = 0; index != vec_pGameObjects.size(); index++)
 	{
 
 
@@ -28,7 +28,7 @@ void PhysicsUpdate(std::vector<cGameObject*>& vec_pGameObjects,
 			//NewVelocty += Velocity + ( Ax * DeltaTime )
 
 			// 
-			pCurObj->setAccel(gravity);
+			//pCurObj->setAccel(gravity);
 
 
 			pCurObj->setVelocity(pCurObj->getVelocity() + pCurObj->getAccel() * deltaTime);

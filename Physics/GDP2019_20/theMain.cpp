@@ -139,7 +139,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 {
 
 	const float CAMERASPEED = 1.0f;
-	const float MOVESPEED = 5.0f;
+	const float MOVESPEED = 2.0f;
 
 	if (!isShiftKeyDownByAlone(mods) && !isCtrlKeyDownByAlone(mods))
 	{
@@ -327,38 +327,42 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	if (isCtrlKeyDownByAlone(mods))
 	{
 		// move the shpere
-		iObject* pSphere = pFindObjectByFriendlyName("Sphere#1");
+		iObject* pEagle = pFindObjectByFriendlyName("eagle");
 		if (key == GLFW_KEY_D)
 		{
 			//pSphere->rotationXYZ -= glm::vec3(CAMERASPEED, 0.0f, 0.0f);
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() - glm::vec3(MOVESPEED, 0.0f, 0.0f));		// Move the camera -0.01f units
+			if(pEagle->getAccel().x > -6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));		// Move the camera -0.01f units
 		}
 		if (key == GLFW_KEY_A)
 		{
 			//pSphere->rotationXYZ += glm::vec3(CAMERASPEED, 0.0f, 0.0f);
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + glm::vec3(MOVESPEED, 0.0f, 0.0f));		// Move the camera +0.01f units
+			if (pEagle->getAccel().x < 6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));		// Move the camera +0.01f units
 		}
 
 		if (key == GLFW_KEY_M && action == GLFW_PRESS)
 		{
-			if (pSphere->getIsWireframe())
+			if (pEagle->getIsWireframe())
 			{
-				pSphere->setIsWireframe(false);
+				pEagle->setIsWireframe(false);
 			}
 			else
 			{
-				pSphere->setIsWireframe(true);
+				pEagle->setIsWireframe(true);
 			}
 		}
 
 		// Move the camera (Q & E for up and down, along the y axis)
 		if (key == GLFW_KEY_Q)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() - glm::vec3(0.0f, MOVESPEED, 0.0f));			// Move the camera -0.01f units
+			if (pEagle->getAccel().y > -6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y - MOVESPEED, 0.0f));			// Move the camera -0.01f units
 		}
 		if (key == GLFW_KEY_E)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + glm::vec3(0.0f, MOVESPEED, 0.0f));			// Move the camera +0.01f units
+			if (pEagle->getAccel().y < 6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y + MOVESPEED, 0.0f));			// Move the camera +0.01f units
 			
 		}
 		//if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
@@ -372,31 +376,61 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		// Move the camera (W & S for towards and away, along the z axis)
 		if (key == GLFW_KEY_S)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() - glm::vec3(0.0f, 0.0f, MOVESPEED));		// Move the camera -0.01f units
+			if (pEagle->getAccel().z > -6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));		// Move the camera -0.01f units
 		}
 		if (key == GLFW_KEY_W)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + glm::vec3(0.0f, 0.0f, MOVESPEED));		// Move the camera +0.01f units
+			if (pEagle->getAccel().z < 6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));		// Move the camera +0.01f units
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + glm::vec3(MOVESPEED, 0.0f, 0.0f));
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + glm::vec3(0.0f, 0.0f, MOVESPEED));
+			if (pEagle->getAccel().x < 6.0f && pEagle->getAccel().z < 6.0f)
+			{
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+			}
+			else if(pEagle->getAccel().x < 6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+			else if(pEagle->getAccel().z < 6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() - glm::vec3(MOVESPEED, 0.0f, 0.0f));
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + glm::vec3(0.0f, 0.0f, MOVESPEED));
+			if (pEagle->getAccel().x > -6.0f && pEagle->getAccel().z < 6.0f)
+			{
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+			}
+			else if (pEagle->getAccel().x > -6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+			else if(pEagle->getAccel().z < 6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() + glm::vec3(MOVESPEED, 0.0f, 0.0f));
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() - glm::vec3(0.0f, 0.0f, MOVESPEED));
+			if (pEagle->getAccel().x < 6.0f && pEagle->getAccel().z > -6.0f)
+			{
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
+			}
+			else if (pEagle->getAccel().x < 6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+			else if (pEagle->getAccel().z > -6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() - glm::vec3(0.0f, 0.0f, MOVESPEED));
-			pSphere->setPositionXYZ(pSphere->getPositionXYZ() - glm::vec3(MOVESPEED, 0.0f, 0.0f));
+			if (pEagle->getAccel().z > -6.0f && pEagle->getAccel().x > -6.0f)
+			{
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+			}
+			else if (pEagle->getAccel().z > -6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
+			else if (pEagle->getAccel().x > -6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
 		}
 
 		if (key == GLFW_KEY_1)
@@ -537,7 +571,7 @@ int main(void)
 	//pTheModelLoader->LoadPlyModel("assets/models/Parts_Exposed_to_Asteroids_xyz_n.ply", exposedPartsMesh);
 
 	cMesh mountainRangeMesh;
-	if (!pTheModelLoader->LoadPlyModel("assets/models/Mountain_smaller_range_xyz_n.ply", mountainRangeMesh))
+	if (!pTheModelLoader->LoadPlyModel("assets/models/Mountain_smaller2_range_xyz_n.ply", mountainRangeMesh))
 	{
 		std::cout << "Error: couldn't find the mountain range ply." << std::endl;
 	}
@@ -545,6 +579,9 @@ int main(void)
 
 	cMesh cubeMesh;
 	pTheModelLoader->LoadPlyModel("assets/models/Cube_1_Unit_from_origin_XYZ_n.ply", cubeMesh);
+
+	cMesh eagleMesh;
+	pTheModelLoader->LoadPlyModel("assets/models/Eagle_xyz_n.ply", eagleMesh);
 
 	cMesh sphereMesh;
 	pTheModelLoader->LoadPlyModel("assets/models/Cube_1_Unit_from_origin_XYZ_n.ply", sphereMesh);
@@ -602,6 +639,9 @@ int main(void)
 	sModelDrawInfo mountainRangeMeshInfo;
 	pTheVAOManager->LoadModelIntoVAO("mountainRange", mountainRangeMesh, mountainRangeMeshInfo, shaderProgID);
 
+	sModelDrawInfo eagleMeshInfo;
+	pTheVAOManager->LoadModelIntoVAO("eagle", eagleMesh, eagleMeshInfo, shaderProgID);
+
 	sModelDrawInfo asteroid011Info;
 	pTheVAOManager->LoadModelIntoVAO("asteroid011",
 		asteroid011Mesh,		// Sphere mesh info
@@ -637,7 +677,23 @@ int main(void)
 	pSphere->setInverseMass(1.0f);
 	pSphere->setIsVisible(true);
 	pSphere->setIsWireframe(false);
-	::g_vec_pGameObjects.push_back(pSphere);
+	//::g_vec_pGameObjects.push_back(pSphere);
+
+	iObject* pEagle = pFactory->CreateObject("sphere");
+	pEagle->setMeshName("eagle");
+	pEagle->setFriendlyName("eagle");	// We use to search 
+	pEagle->setPositionXYZ(glm::vec3(0.0f, 50.0f, 0.0f));
+	pEagle->setRotationXYZ(glm::vec3(0.0f, 0.0f, 0.0f));
+	pEagle->setScale(1.0f);
+	pEagle->setObjectColourRGBA(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	//pSphere->setDebugColour(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	pEagle->setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+	pEagle->setAccel(glm::vec3(0.0f, 0.0f, 0.0f));
+	pEagle->set_SPHERE_radius(1.0f);
+	pEagle->setInverseMass(1.0f);
+	pEagle->setIsVisible(true);
+	pEagle->setIsWireframe(false);
+	::g_vec_pGameObjects.push_back(pEagle);
 
 	iObject* pMountainRange = pFactory->CreateObject("mesh");
 	pMountainRange->setMeshName("mountainRange");
@@ -803,9 +859,11 @@ int main(void)
 
 		glm::vec3 mainLightPosition = glm::vec3(pMainLight->getPositionX(), pMainLight->getPositionY(), pMainLight->getPositionZ());
 
-		
+		cameraEye.x = pEagle->getPositionXYZ().x;
+		cameraEye.y = pEagle->getPositionXYZ().y + 15.0f;
+		cameraEye.z = pEagle->getPositionXYZ().z - 75.0f;
 		v = glm::lookAt(cameraEye,
-			pSphere->getPositionXYZ(),
+			pEagle->getPositionXYZ(),
 			upVector);
 
 		glViewport(0, 0, width, height);
@@ -848,19 +906,27 @@ int main(void)
 			cameraEye.x, cameraEye.y, cameraEye.z, 1.0f);
 
 		
-		unsigned long long pID = cAABB::get_ID_of_AABB_I_Might_Be_In(pSphere->getPositionXYZ());
+		unsigned long long pID = cAABB::get_ID_of_AABB_I_Might_Be_In(pEagle->getPositionXYZ());
 		pCurrentAABB = g_mapAABBs_World.begin()->second;
 		if (pID)
 		{
 			std::stringstream ssTitle;
 			ssTitle
 				<< "The sphere is at: "
-				<< pSphere->getPositionXYZ().x << ", "
-				<< pSphere->getPositionXYZ().y << ", "
-				<< pSphere->getPositionXYZ().z << ", "
-				<< " total AABBs: " << g_mapAABBs_World.size()
-				<< "   and is inside AABB: " << pID
-				<< " which has " << ::g_mapAABBs_World.find(pID)->second->vecTriangles.size() << std::endl;
+				<< pEagle->getPositionXYZ().x << ", "
+				<< pEagle->getPositionXYZ().y << ", "
+				<< pEagle->getPositionXYZ().z << ", "
+				<< "Acceleration is: "
+				<< pEagle->getAccel().x << ", "
+				<< pEagle->getAccel().y << ", "
+				<< pEagle->getAccel().z << ", "
+				<< "Velocity is: "
+				<< pEagle->getVelocity().x << ", "
+				<< pEagle->getVelocity().y << ", "
+				<< pEagle->getVelocity().z << ", ";
+				//<< " total AABBs: " << g_mapAABBs_World.size()
+				//<< "   and is inside AABB: " << pID
+				//<< " which has " << ::g_mapAABBs_World.find(pID)->second->vecTriangles.size() << std::endl;
 			glfwSetWindowTitle(window, ssTitle.str().c_str());
 			pCurrentAABB = g_mapAABBs_World.find(pID)->second;
 		}
@@ -990,31 +1056,30 @@ int main(void)
 			//cMesh transformedMesh;
 			//pPhsyics->CalculateTransformedMesh(mountainRangeMesh, matWorld, transformedMesh);
 
-			pPhsyics->GetClosestTriangleToPoint(pSphere->getPositionXYZ(), pCurrentAABB, closestPoint, closestTriangle);
+			pPhsyics->GetClosestTriangleToPoint(pEagle->getPositionXYZ(), &mountainRangeMesh, pCurrentAABB, closestPoint, closestTriangle);
+			closestTriangle.normal;
 
 			// Highlight the triangle that I'm closest to
-			//pDebugRenderer->addTriangle(closestTriangle.verts[0],
-			//	closestTriangle.verts[1],
-			//	closestTriangle.verts[2],
-			//	glm::vec3(1.0f, 0.0f, 0.0f));
+			pDebugRenderer->addTriangle(closestTriangle.verts[0],
+				closestTriangle.verts[1],
+				closestTriangle.verts[2],
+				glm::vec3(1.0f, 0.0f, 0.0f));
 
 			//// Highlight the triangle that I'm closest to
 			//// To draw the normal, calculate the average of the 3 vertices, 
 			//// then draw that average + the normal (the normal starts at the 0,0,0 OF THE TRIANGLE)
-			//glm::vec3 centreOfTriangle = (closestTriangle.verts[0] +
-			//	closestTriangle.verts[1] +
-			//	closestTriangle.verts[2]) / 3.0f;		// Average
+			glm::vec3 centreOfTriangle = (closestTriangle.verts[0] + closestTriangle.verts[1] +	closestTriangle.verts[2]) / 3.0f;		// Average
 
-			//glm::vec3 normalInWorld = centreOfTriangle + (closestTriangle.normal * 20.0f);	// Normal x 10 length
+			glm::vec3 normalInWorld = centreOfTriangle + (closestTriangle.normal * 20.0f);	// Normal x 10 length
 
-			//pDebugRenderer->addLine(centreOfTriangle,
-			//	normalInWorld,
-			//	glm::vec3(1.0f, 1.0f, 0.0f));
+			pDebugRenderer->addLine(centreOfTriangle,
+				normalInWorld,
+				glm::vec3(1.0f, 1.0f, 0.0f));
 
 			// Are we hitting the triangle? 
-			float distance = glm::length(pSphere->getPositionXYZ() - closestPoint);
+			float distance = glm::length(pEagle->getPositionXYZ() - closestPoint);
 
-			if (distance <= pSphere->get_SPHERE_radius())
+			if (distance <= pEagle->get_SPHERE_radius())
 			{
 				//if (k == 0)
 				//{
@@ -1052,8 +1117,8 @@ int main(void)
 
 							// Is in contact with the triangle... 
 							// Calculate the response vector off the triangle. 
-				glm::vec3 velocityVector = glm::normalize(pSphere->getVelocity());
-				float gravY = (-pSphere->getVelocity().y) * 0.45f;
+				glm::vec3 velocityVector = glm::normalize(pEagle->getVelocity());
+				float gravY = (-pEagle->getVelocity().y) * 0.45f;
 				glm::vec3 gravity = glm::vec3(0.0f, gravY, 0.0f);
 
 				// closestTriangle.normal
@@ -1074,11 +1139,11 @@ int main(void)
 				// Change the direction of the ball (the bounce off the triangle)
 
 				// Get lenght of the velocity vector
-				float speed = glm::length(pSphere->getVelocity());
+				float speed = glm::length(pEagle->getVelocity());
 
 
-				pSphere->setVelocity((reflectionVec* speed) - gravity);
-				pSphere->setDiffuseColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+				//pEagle->setVelocity((reflectionVec* speed) - gravity);
+				pEagle->setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 				//std::cout << pSphere->velocity.b << ", " << pSphere->velocity.g << ", " << pSphere->velocity.p << ", " << pSphere->velocity.r << ", " << pSphere->velocity.s << ", " << pSphere->velocity.t << ", " << pSphere->velocity.x << ", " << pSphere->velocity.y << ", " << pSphere->velocity.z;
 				break;
 			}
@@ -1101,10 +1166,10 @@ int main(void)
 
 
 			// How far did we penetrate the surface?
-			glm::vec3 CentreToClosestPoint = pSphere->getPositionXYZ() - closestPoint;
+			glm::vec3 CentreToClosestPoint = pEagle->getPositionXYZ() - closestPoint;
 
 			// Direction that ball is going is normalized velocity
-			glm::vec3 directionBall = glm::normalize(pSphere->getVelocity());	// 1.0f
+			glm::vec3 directionBall = glm::normalize(pEagle->getVelocity());	// 1.0f
 
 			// Calcualte direction to move it back the way it came from
 			glm::vec3 oppositeDirection = -directionBall;				// 1.0f

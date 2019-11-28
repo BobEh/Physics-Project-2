@@ -27,8 +27,7 @@ void cPhysics::IntegrationStep(std::vector<iObject*>& vec_pGameObjects, float de
 {
 
 
-	for (unsigned int index = 0;
-		 index != vec_pGameObjects.size(); index++)
+	for (unsigned int index = 0; index != vec_pGameObjects.size(); index++)
 	{
 		// Get a pointer to the current object (makes the code a little clearer)
 		iObject* pCurObj = vec_pGameObjects[index];
@@ -40,7 +39,7 @@ void cPhysics::IntegrationStep(std::vector<iObject*>& vec_pGameObjects, float de
 			//NewVelocty += Velocity + ( Ax * DeltaTime )
 
 			// 
-			pCurObj->setAccel(this->m_Gravity);
+			//pCurObj->setAccel(this->m_Gravity);
 
 
 			pCurObj->setVelocity(pCurObj->getVelocity() + pCurObj->getAccel() * deltaTime);
@@ -50,9 +49,62 @@ void cPhysics::IntegrationStep(std::vector<iObject*>& vec_pGameObjects, float de
 					//NewPosition = Posistion + ( Vx * DeltaTime )
 
 			pCurObj->setPositionXYZ(pCurObj->getPositionXYZ() + pCurObj->getVelocity() * deltaTime);
-
-
+			
 		}
+
+		if (pCurObj->getVelocity().x > 0.0f)
+		{
+			if (pCurObj->getAccel().x < 0.0f)
+				pCurObj->setAccel(glm::vec3(0.0f, pCurObj->getAccel().y, pCurObj->getAccel().z));
+
+			pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x - 0.1f, pCurObj->getAccel().y, pCurObj->getAccel().z));
+			pCurObj->setVelocity(glm::vec3(pCurObj->getVelocity().x - 0.1f, pCurObj->getVelocity().y, pCurObj->getVelocity().z));
+		}
+		if (pCurObj->getVelocity().y > 0.0f)
+		{
+			if (pCurObj->getAccel().y < 0.0f)
+				pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, 0.0f, pCurObj->getAccel().z));
+
+			pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, pCurObj->getAccel().y - 0.1f, pCurObj->getAccel().z));
+			pCurObj->setVelocity(glm::vec3(pCurObj->getVelocity().x, pCurObj->getVelocity().y - 0.1f, pCurObj->getVelocity().z));
+		}
+		if (pCurObj->getVelocity().z > 0.0f)
+		{
+			if (pCurObj->getAccel().z < 0.0f)
+				pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, pCurObj->getAccel().y, 0.0f));
+
+			pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, pCurObj->getAccel().y, pCurObj->getAccel().z - 0.1f));
+			pCurObj->setVelocity(glm::vec3(pCurObj->getVelocity().x, pCurObj->getVelocity().y, pCurObj->getVelocity().z - 0.1f));
+		}
+
+
+		if (pCurObj->getVelocity().x < 0.0f)
+		{
+			if (pCurObj->getAccel().x > 0.0f)
+			{
+				pCurObj->setAccel(glm::vec3(0.0f, pCurObj->getAccel().y, pCurObj->getAccel().z));
+				//pCurObj->setVelocity(glm::vec3(0.0f, pCurObj->getVelocity().y, pCurObj->getVelocity().z));
+			}
+			pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x + 0.1f, pCurObj->getAccel().y, pCurObj->getAccel().z));
+			pCurObj->setVelocity(glm::vec3(pCurObj->getVelocity().x + 0.1f, pCurObj->getVelocity().y, pCurObj->getVelocity().z));
+		}
+		if (pCurObj->getVelocity().y < 0.0f)
+		{
+			if (pCurObj->getAccel().y > 0.0f)
+				pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, 0.0f, pCurObj->getAccel().z));
+
+			pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, pCurObj->getAccel().y + 0.1f, pCurObj->getAccel().z));
+			pCurObj->setVelocity(glm::vec3(pCurObj->getVelocity().x, pCurObj->getVelocity().y + 0.1f, pCurObj->getVelocity().z));
+		}
+		if (pCurObj->getVelocity().z < 0.0f)
+		{
+			if (pCurObj->getAccel().z > 0.0f)
+				pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, pCurObj->getAccel().y, 0.0f));
+
+			pCurObj->setAccel(glm::vec3(pCurObj->getAccel().x, pCurObj->getAccel().y, pCurObj->getAccel().z + 0.1f));
+			pCurObj->setVelocity(glm::vec3(pCurObj->getVelocity().x, pCurObj->getVelocity().y, pCurObj->getVelocity().z + 0.1f));
+		}
+
 	}//for (unsigned int index = 0;
 
 	return;
@@ -130,7 +182,7 @@ void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cMesh& mesh, glm::vec3&
 
 	return;
 }
-void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cAABB* currentAABB, glm::vec3& closestPoint, sPhysicsTriangle& closestTriangle)
+void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cMesh* mesh, cAABB* currentAABB, glm::vec3& closestPoint, sPhysicsTriangle& closestTriangle)
 {
 	// Assume the closest distance is REALLY far away
 	float closestDistanceSoFar = FLT_MAX;
@@ -142,9 +194,13 @@ void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cAABB* currentAABB, glm
 		sPlyTriangle& curTriangle = *currentAABB->vecTriangles[triIndex];
 
 		// Get the vertices of the triangle
-		sPlyVertexXYZ_N triVert1 = currentAABB->triPosition.at(triIndex);
-		sPlyVertexXYZ_N triVert2 = currentAABB->triPosition.at(triIndex);
-		sPlyVertexXYZ_N triVert3 = currentAABB->triPosition.at(triIndex);
+		sPlyVertexXYZ_N triVert1 = mesh->vecVertices[curTriangle.vert_index_1];
+		sPlyVertexXYZ_N triVert2 = mesh->vecVertices[curTriangle.vert_index_2];
+		sPlyVertexXYZ_N triVert3 = mesh->vecVertices[curTriangle.vert_index_3];
+
+		//sPlyVertexXYZ_N triVert1 = currentAABB->triPosition.at(triIndex);
+		//sPlyVertexXYZ_N triVert2 = currentAABB->triPosition.at(triIndex);
+		//sPlyVertexXYZ_N triVert3 = currentAABB->triPosition.at(triIndex);
 
 		//glm::vec3 triVert1 = currentAABB->triXPosition.at(triIndex);
 		//glm::vec3 triVert2 = currentAABB->triYPosition.at(triIndex);
@@ -192,14 +248,12 @@ void cPhysics::GetClosestTriangleToPoint(Point pointXYZ, cAABB* currentAABB, glm
 			closestTriangle.verts[2].y = triVert3.y;
 			closestTriangle.verts[2].z = triVert3.z;
 
-			// TODO: Copy the normal, too	
-			// Quick is to average the normal of all 3 vertices
 			glm::vec3 triVert1Norm = glm::vec3(triVert1.nx, triVert1.ny, triVert1.nz);
 			glm::vec3 triVert2Norm = glm::vec3(triVert2.nx, triVert2.ny, triVert2.nz);
 			glm::vec3 triVert3Norm = glm::vec3(triVert3.nx, triVert3.ny, triVert3.nz);
 
 			// Average of the vertex normals... 
-			closestTriangle.normal = (triVert1Norm + triVert2Norm + triVert3Norm) / 3.0f;
+ 			closestTriangle.normal = (triVert1Norm + triVert2Norm + triVert3Norm) / 3.0f;
 
 		}
 		//numLoops++;

@@ -61,4 +61,6 @@ public:
 	virtual void setIsVisible(bool isVisible) = 0;
 	virtual void setDisableDepthBufferTest(bool disableDepthBufferTest) = 0;
 	virtual void setDisableDepthBufferWrite(bool disableDwpthBufferWrite) = 0;
+
+	virtual void MoveInRelativeDirection(glm::vec3 relativeDirection) = 0;
 };

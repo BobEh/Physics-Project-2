@@ -331,14 +331,19 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		if (key == GLFW_KEY_D)
 		{
 			//pSphere->rotationXYZ -= glm::vec3(CAMERASPEED, 0.0f, 0.0f);
-			if(pEagle->getAccel().x > -6.0f)
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));		// Move the camera -0.01f units
+/*			if(pEagle->getAccel().x > -6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));	*/	// Move the camera -0.01f units
+			pEagle->setRotationXYZ(glm::quat(glm::vec3( pEagle->getRotationXYZ().x, pEagle->getRotationXYZ().y + glm::radians(0.1f), pEagle->getRotationXYZ().z)));
 		}
 		if (key == GLFW_KEY_A)
 		{
 			//pSphere->rotationXYZ += glm::vec3(CAMERASPEED, 0.0f, 0.0f);
-			if (pEagle->getAccel().x < 6.0f)
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));		// Move the camera +0.01f units
+/*			if (pEagle->getAccel().x < 6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));*/		// Move the camera +0.01f units
+			//glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(1.0f), 0.0f));
+			//rotation *= 0.03f;
+			glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(1.0f), 0.0f));
+			pEagle->setRotationXYZ(pEagle->getRotationXYZ() * rotation);
 		}
 
 		if (key == GLFW_KEY_M && action == GLFW_PRESS)
@@ -356,13 +361,15 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		// Move the camera (Q & E for up and down, along the y axis)
 		if (key == GLFW_KEY_Q)
 		{
-			if (pEagle->getAccel().y > -6.0f)
-				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y - MOVESPEED, 0.0f));			// Move the camera -0.01f units
+/*			if (pEagle->getAccel().y > -6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y - MOVESPEED, 0.0f));*/			// Move the camera -0.01f units
+			pEagle->setRotationXYZ(glm::quat(glm::vec3(pEagle->getRotationXYZ().x + glm::radians(0.1f), pEagle->getRotationXYZ().y, pEagle->getRotationXYZ().z)));
 		}
 		if (key == GLFW_KEY_E)
 		{
-			if (pEagle->getAccel().y < 6.0f)
-				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y + MOVESPEED, 0.0f));			// Move the camera +0.01f units
+/*			if (pEagle->getAccel().y < 6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y + MOVESPEED, 0.0f));*/			// Move the camera +0.01f units
+			pEagle->setRotationXYZ(glm::quat(glm::vec3(pEagle->getRotationXYZ().x - glm::radians(0.1f), pEagle->getRotationXYZ().y, pEagle->getRotationXYZ().z)));
 			
 		}
 		//if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
@@ -683,7 +690,7 @@ int main(void)
 	pEagle->setMeshName("eagle");
 	pEagle->setFriendlyName("eagle");	// We use to search 
 	pEagle->setPositionXYZ(glm::vec3(0.0f, 0.0f, 0.0f));
-	pEagle->setRotationXYZ(glm::vec3(0.0f, 0.0f, 0.0f));
+	pEagle->setRotationXYZ(glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)));
 	pEagle->setScale(1.0f);
 	pEagle->setObjectColourRGBA(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	//pSphere->setDebugColour(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -1035,10 +1042,45 @@ int main(void)
 
 			iObject* pCurrentObject = ::g_vec_pGameObjects[index];
 
+			//glm::quat Qrotation = glm::quat(glm::vec3(0.0f, 0.1f, 0.0f));
+			//pEagle->setRotationXYZ(pEagle->getRotationXYZ()* Qrotation);
+
+			//glm::mat4 rotation = glm::mat4( pCurrentObject->getRotationXYZ());
+
+			//glm::vec4 modelRotation = matModel * glm::vec4(pCurrentObject->getRotationXYZ().w, 
+			//	pCurrentObject->getRotationXYZ().x,
+			//	pCurrentObject->getRotationXYZ().y,
+			//	pCurrentObject->getRotationXYZ().z);
+
+			//glm::quat modelQRotation = glm::quat(rotation);
+			//pCurrentObject->setRotationXYZ(modelQRotation);
+
+			//matModel *= rotation;
+
+			//glm::mat4 translation = glm::translate(glm::mat4(1.0f), pCurrentObject->getPositionXYZ());
+
+			//matModel *= translation;
+
+			//glm::mat4 rotation = glm::mat4(pCurrentObject->getRotationXYZ());
+
+			//matModel *= rotation;
+
+			//glm::vec4 currentObjectPosition = matModel * glm::vec4(pCurrentObject->getPositionXYZ(), 1.0f);
+
+			//glm::quat currentObjectRotation = matModel * glm::mat4(pCurrentObject->getRotationXYZ());
+
+			//pCurrentObject->setPositionXYZ(currentObjectPosition);
+
+			//pCurrentObject->setRotationXYZ(currentObjectRotation);
+
 			DrawObject(matModel, pCurrentObject,
 				shaderProgID, pTheVAOManager);
 
 		}//for (int index...
+
+		//glm::quat rotation = glm::quat(glm::vec3(0.0f, 0.1f, 0.0f));
+		//pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+
 		for (int index = 0; index != ::g_vec_pEnvironmentObjects.size(); index++)
 		{
 			glm::mat4 matModel = glm::mat4(1.0f);
@@ -1436,20 +1478,22 @@ void DrawObject(glm::mat4 m, iObject* pCurrentObject, GLint shaderProgID, cVAOMa
 
 	// ******* ROTATION TRANSFORM *********
 	//mat4x4_rotate_Z(m, m, (float) glfwGetTime());
-	glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f),
-		pCurrentObject->getRotationXYZ().z,					// Angle 
-		glm::vec3(0.0f, 0.0f, 1.0f));
-	m = m * rotateZ;
+	//glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f),
+	//	pCurrentObject->getRotationXYZ().z,					// Angle 
+	//	glm::vec3(0.0f, 0.0f, 1.0f));
+	//m = m * rotateZ;
 
-	glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f),
-		pCurrentObject->getRotationXYZ().y,	//(float)glfwGetTime(),					// Angle 
-		glm::vec3(0.0f, 1.0f, 0.0f));
-	m = m * rotateY;
+	//glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f),
+	//	pCurrentObject->getRotationXYZ().y,	//(float)glfwGetTime(),					// Angle 
+	//	glm::vec3(0.0f, 1.0f, 0.0f));
+	//m = m * rotateY;
 
-	glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f),
-		pCurrentObject->getRotationXYZ().x,	// (float)glfwGetTime(),					// Angle 
-		glm::vec3(1.0f, 0.0f, 0.0f));
-	m = m * rotateX;
+	//glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f),
+	//	pCurrentObject->getRotationXYZ().x,	// (float)glfwGetTime(),					// Angle 
+	//	glm::vec3(1.0f, 0.0f, 0.0f));
+	//m = m * rotateX;
+	glm::mat4 rotation = glm::mat4(pCurrentObject->getRotationXYZ());
+	m *= rotation;
 	// ******* ROTATION TRANSFORM *********
 
 

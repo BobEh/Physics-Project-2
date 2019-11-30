@@ -200,6 +200,31 @@ void cMeshObject::setDisableDepthBufferWrite(bool disableDepthBufferWrite)
 	this->_disableDepthBufferWrite = disableDepthBufferWrite;
 }
 
+void cMeshObject::MoveInRelativeDirection(glm::vec3 relativeDirection)
+{
+	// The "forward" vector is +ve Z
+	// (the 4th number is because we need a vec4 later)
+	glm::vec4 forwardDirObject = glm::vec4(relativeDirection, 1.0f);
+
+	glm::mat4 matModel = glm::mat4(1.0f);	// Identity
+
+	// Roation
+	// Constructor for the GLM mat4x4 can take a quaternion
+	glm::mat4 matRotation = glm::mat4(this->getRotationXYZ());
+	matModel *= matRotation;
+	// *******************
+
+	// Like in the vertex shader, I mulitly the test points
+	// by the model matrix (MUST be a VEC4 because it's a 4x4 matrix)
+	glm::vec4 forwardInWorldSpace = matModel * forwardDirObject;
+
+
+	// Add this to the position of the object
+	this->setPositionXYZ(this->getPositionXYZ() + glm::vec3(forwardInWorldSpace));
+
+	return;
+}
+
 cMeshObject::cMeshObject()
 {
 	this->_scale = 0.0f;

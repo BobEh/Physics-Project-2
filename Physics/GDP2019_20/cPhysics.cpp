@@ -43,12 +43,22 @@ void cPhysics::IntegrationStep(std::vector<iObject*>& vec_pGameObjects, float de
 
 
 			pCurObj->setVelocity(pCurObj->getVelocity() + pCurObj->getAccel() * deltaTime);
+			pCurObj->MoveInRelativeDirection(pCurObj->getVelocity() * deltaTime);
 			//		// Or you can do this...
 			//		CurObj.velocity += CurObj.accel * deltaTime;
 
 					//NewPosition = Posistion + ( Vx * DeltaTime )
 
-			pCurObj->setPositionXYZ(pCurObj->getPositionXYZ() + pCurObj->getVelocity() * deltaTime);
+			//glm::mat4 matModel = glm::mat4(1.0f);
+
+			//glm::mat4 translation = glm::translate(glm::mat4(1.0f), pCurObj->getPositionXYZ());
+
+			//matModel *= translation;
+
+			//glm::vec4 testPointInModel = matModel * glm::vec4(pCurObj->getPositionXYZ(), 1.0f);
+
+			//pCurObj->setPositionXYZ(pCurObj->getPositionXYZ() + pCurObj->getVelocity() * deltaTime);
+			//pCurObj->MoveInRelativeDirection(pCurObj->getPositionXYZ() + pCurObj->getVelocity() * deltaTime);
 			
 		}
 

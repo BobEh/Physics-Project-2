@@ -68,6 +68,8 @@ public:
 	void setDisableDepthBufferWrite(bool disableDwpthBufferWrite);
 	void addTestPoint(glm::vec3);
 
+	void MoveInRelativeDirection(glm::vec3 relativeDirection);
+
 private:
 	glm::quat qRotation;
 	std::vector<glm::vec3> testPoints;
@@ -77,7 +79,6 @@ private:
 	unsigned int _friendlyIDNumber;
 	std::string _friendlyName;
 	glm::vec3  _positionXYZ;
-	glm::vec3  _rotationXYZ;
 	float _scale;
 	glm::mat4 _matWorld;
 	glm::vec4  _objectColourRGBA;

@@ -60,6 +60,7 @@ extern std::map<unsigned long long /*ID*/, cAABB*> g_mapAABBs_World;
 cAABB* pCurrentAABB;
 
 bool fileChanged = false;
+bool displayAABBs = false;
 
 void DrawObject(glm::mat4 m, iObject* pCurrentObject, GLint shaderProgID, cVAOManager* pVAOManager);
 
@@ -197,6 +198,11 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 //			pBall->diffuseColour = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 		}//if ( key == GLFW_KEY_B )
 
+		if (key == GLFW_KEY_P && action == GLFW_PRESS)
+		{
+			displayAABBs = !displayAABBs;
+		}
+
 	}
 
 	if (isShiftKeyDownByAlone(mods))
@@ -333,7 +339,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 			//pSphere->rotationXYZ -= glm::vec3(CAMERASPEED, 0.0f, 0.0f);
 /*			if(pEagle->getAccel().x > -6.0f)
 				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));	*/	// Move the camera -0.01f units
-			pEagle->setRotationXYZ(glm::quat(glm::vec3( pEagle->getRotationXYZ().x, pEagle->getRotationXYZ().y + glm::radians(0.1f), pEagle->getRotationXYZ().z)));
+			//pEagle->setRotationXYZ(glm::quat(glm::vec3( pEagle->getRotationXYZ().x, pEagle->getRotationXYZ().y + glm::radians(0.1f), pEagle->getRotationXYZ().z)));
+
+			glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(-1.0f), 0.0f));
+			pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
 		}
 		if (key == GLFW_KEY_A)
 		{
@@ -363,13 +372,19 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		{
 /*			if (pEagle->getAccel().y > -6.0f)
 				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y - MOVESPEED, 0.0f));*/			// Move the camera -0.01f units
-			pEagle->setRotationXYZ(glm::quat(glm::vec3(pEagle->getRotationXYZ().x + glm::radians(0.1f), pEagle->getRotationXYZ().y, pEagle->getRotationXYZ().z)));
+			//pEagle->setRotationXYZ(glm::quat(glm::vec3(pEagle->getRotationXYZ().x + glm::radians(0.1f), pEagle->getRotationXYZ().y, pEagle->getRotationXYZ().z)));
+
+			glm::quat rotation = glm::quat(glm::vec3(glm::radians(-1.0f), 0.0f, 0.0f));
+			pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
 		}
 		if (key == GLFW_KEY_E)
 		{
 /*			if (pEagle->getAccel().y < 6.0f)
 				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y + MOVESPEED, 0.0f));*/			// Move the camera +0.01f units
-			pEagle->setRotationXYZ(glm::quat(glm::vec3(pEagle->getRotationXYZ().x - glm::radians(0.1f), pEagle->getRotationXYZ().y, pEagle->getRotationXYZ().z)));
+			//pEagle->setRotationXYZ(glm::quat(glm::vec3(pEagle->getRotationXYZ().x - glm::radians(0.1f), pEagle->getRotationXYZ().y, pEagle->getRotationXYZ().z)));
+
+			glm::quat rotation = glm::quat(glm::vec3(glm::radians(1.0f), 0.0f, 0.0f));
+			pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
 			
 		}
 		//if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
@@ -393,51 +408,164 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			if (pEagle->getAccel().x < 6.0f && pEagle->getAccel().z < 6.0f)
+			if (pEagle->getAccel().z < 6.0f)
 			{
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
 				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
 			}
-			else if(pEagle->getAccel().x < 6.0f)
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
-			else if(pEagle->getAccel().z < 6.0f)
-				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+			//else if(pEagle->getAccel().x < 6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ() * rotation);
+			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		{
-			if (pEagle->getAccel().x > -6.0f && pEagle->getAccel().z < 6.0f)
+			if (pEagle->getAccel().z < 6.0f)
 			{
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
 				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(-1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
 			}
-			else if (pEagle->getAccel().x > -6.0f)
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
-			else if(pEagle->getAccel().z < 6.0f)
-				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+			//else if (pEagle->getAccel().x > -6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(-1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		{
-			if (pEagle->getAccel().x < 6.0f && pEagle->getAccel().z > -6.0f)
+			if (pEagle->getAccel().z > -6.0f)
 			{
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
 				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
 			}
-			else if (pEagle->getAccel().x < 6.0f)
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
-			else if (pEagle->getAccel().z > -6.0f)
-				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
+			//else if (pEagle->getAccel().x < 6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			if (pEagle->getAccel().z > -6.0f && pEagle->getAccel().x > -6.0f)
+			if (pEagle->getAccel().z > -6.0f)
 			{
 				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
-				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(-1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
 			}
-			else if (pEagle->getAccel().z > -6.0f)
-				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
-			else if (pEagle->getAccel().x > -6.0f)
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(0.0f, glm::radians(-1.0f), 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+			//else if (pEagle->getAccel().x > -6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+		}
+
+		if (key == GLFW_KEY_LEFT)
+		{
+			if (pEagle->getAccel().x < 6.0f)
+				pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+		}
+
+		if (key == GLFW_KEY_RIGHT)
+		{
+			if (pEagle->getAccel().x > -6.0f)
 				pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+		}
+
+		if (key == GLFW_KEY_UP)
+		{
+			if (pEagle->getAccel().y < 6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y + MOVESPEED, 0.0f));
+		}
+
+		if (key == GLFW_KEY_DOWN)
+		{
+			if (pEagle->getAccel().y > -6.0f)
+				pEagle->setAccel(glm::vec3(0.0f, pEagle->getAccel().y - MOVESPEED, 0.0f));
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			if (pEagle->getAccel().z < 6.0f)
+			{
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(-1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+			//else if(pEagle->getAccel().x < 6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(-1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+		}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			if (pEagle->getAccel().z < 6.0f)
+			{
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z + MOVESPEED));
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+			//else if (pEagle->getAccel().x > -6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+		}
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			if (pEagle->getAccel().z > -6.0f)
+			{
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(-1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+			//else if (pEagle->getAccel().x < 6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x + MOVESPEED, 0.0f, 0.0f));
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(-1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+		}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			if (pEagle->getAccel().z > -6.0f)
+			{
+				pEagle->setAccel(glm::vec3(0.0f, 0.0f, pEagle->getAccel().z - MOVESPEED));
+				//pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+			else
+			{
+				glm::quat rotation = glm::quat(glm::vec3(glm::radians(1.0f), 0.0f, 0.0f));
+				pEagle->setRotationXYZ(pEagle->getRotationXYZ()* rotation);
+			}
+			//else if (pEagle->getAccel().x > -6.0f)
+			//	pEagle->setAccel(glm::vec3(pEagle->getAccel().x - MOVESPEED, 0.0f, 0.0f));
 		}
 
 		if (key == GLFW_KEY_1)
@@ -943,13 +1071,21 @@ int main(void)
 			pCurrentAABB = g_mapAABBs_World.find(pID)->second;
 		}
 
-		glm::mat4 matModel = glm::mat4(1.0f);
-		pDebugCube->setPositionXYZ(g_mapAABBs_World.find(pID)->second->getCentre());
-		pDebugCube->setScale(25.0f / 2.0f);
-		pDebugCube->setDebugColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		pDebugCube->setIsWireframe(true);
-		DrawObject(matModel, pDebugCube,
-			shaderProgID, pTheVAOManager);
+		if (g_mapAABBs_World.find(pID)->second)
+		{
+			if (displayAABBs)
+			{
+				glm::mat4 matModel = glm::mat4(1.0f);
+				pDebugCube->setPositionXYZ(g_mapAABBs_World.find(pID)->second->getCentre());
+				pDebugCube->setScale(25.0f / 2.0f);
+				pDebugCube->setDebugColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+				pDebugCube->setIsWireframe(true);
+				DrawObject(matModel, pDebugCube,
+					shaderProgID, pTheVAOManager);
+			}
+		}
+
+		
 
 
 		//pCurrentAABB = g_mapAABBs_World.find(pID)->second;
